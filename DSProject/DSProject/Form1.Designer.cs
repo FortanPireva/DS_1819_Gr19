@@ -31,11 +31,9 @@
             this.txtPlaintexti = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnEnkripto = new System.Windows.Forms.Button();
-            this.txtCelesi = new System.Windows.Forms.TextBox();
             this.btnDekripto = new System.Windows.Forms.Button();
             this.txtCiphertexti = new System.Windows.Forms.TextBox();
             this.txtTextiDekriptuar = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -68,14 +66,6 @@
             this.btnEnkripto.UseVisualStyleBackColor = true;
             this.btnEnkripto.Click += new System.EventHandler(this.btnEnkripto_Click);
             // 
-            // txtCelesi
-            // 
-            this.txtCelesi.Location = new System.Drawing.Point(147, 135);
-            this.txtCelesi.Name = "txtCelesi";
-            this.txtCelesi.Size = new System.Drawing.Size(801, 22);
-            this.txtCelesi.TabIndex = 5;
-            this.txtCelesi.TextChanged += new System.EventHandler(this.txtCelesi_TextChanged);
-            // 
             // btnDekripto
             // 
             this.btnDekripto.Location = new System.Drawing.Point(873, 334);
@@ -101,15 +91,6 @@
             this.txtTextiDekriptuar.Size = new System.Drawing.Size(794, 22);
             this.txtTextiDekriptuar.TabIndex = 8;
             this.txtTextiDekriptuar.TextChanged += new System.EventHandler(this.txtTextiDekriptuar_TextChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 136);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(106, 17);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Shkruaj Celesin";
             // 
             // label3
             // 
@@ -137,11 +118,9 @@
             this.ClientSize = new System.Drawing.Size(1031, 450);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.txtTextiDekriptuar);
             this.Controls.Add(this.txtCiphertexti);
             this.Controls.Add(this.btnDekripto);
-            this.Controls.Add(this.txtCelesi);
             this.Controls.Add(this.btnEnkripto);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtPlaintexti);
@@ -158,11 +137,9 @@
         private System.Windows.Forms.TextBox txtPlaintexti;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnEnkripto;
-        private System.Windows.Forms.TextBox txtCelesi;
         private System.Windows.Forms.Button btnDekripto;
         private System.Windows.Forms.TextBox txtCiphertexti;
         private System.Windows.Forms.TextBox txtTextiDekriptuar;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
     }

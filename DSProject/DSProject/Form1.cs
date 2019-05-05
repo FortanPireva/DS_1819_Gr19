@@ -12,6 +12,7 @@ namespace DSProject
 {
     public partial class Form1 : Form
     {
+        public int key;
         public Form1()
         {
             InitializeComponent();
@@ -111,21 +112,59 @@ namespace DSProject
             }
             return (char)numri;
         }
+        public int RandomKey()
+        {
+            Random rnd = new Random();
+            int[] array = new int[8];
+            array[0] = rnd.Next(1, 9);
+            int[] arraycopy = new int[8];
+            arraycopy[0] = array[0];
+
+            string numri =""+array[0];
+            for (int i = 1; i < 8; i++)
+            {
+
+                while (isInArray(arraycopy, array[i]))
+                {
+                    array[i] = rnd.Next(1, 9);
+
+                }
+                arraycopy[i] = array[i];
+                numri += array[i];
 
 
-        private void button2_Click(object sender, EventArgs e)
+            }
+            key = Int32.Parse(numri);
+            return key;
+
+        bool isInArray(int[] arr, int nr)
+        {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                if (nr == arr[i])
+                    return true;
+
+            }
+            return false;
+        }
+    }
+
+    private void button2_Click(object sender, EventArgs e)
         {
 
-            string decryptedString = Decrypt(txtCiphertexti.Text,
-               int.Parse(txtCelesi.Text));
+            byte[] byteArray = Convert.FromBase64String(txtCiphertexti.Text);
+            string stringu =Encoding.Unicode.GetString(byteArray);
+            string decryptedString = Decrypt(stringu,
+              key);
             txtTextiDekriptuar.Text = decryptedString;
 
         }
 
         private void btnEnkripto_Click(object sender, EventArgs e)
         {
-            string encryptedString = Encrypt(txtPlaintexti.Text, int.Parse(txtCelesi.Text));
-            txtCiphertexti.Text = encryptedString;
+            string encryptedString = Encrypt(txtPlaintexti.Text, RandomKey());
+            byte[] byteArray = Encoding.Unicode.GetBytes(encryptedString);
+            txtCiphertexti.Text =Convert.ToBase64String(byteArray);
         }
 
         private void plainTextBox2_TextChanged(object sender, EventArgs e)
