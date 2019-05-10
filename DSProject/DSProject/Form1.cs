@@ -120,7 +120,7 @@ namespace DSProject
             int[] arraycopy = new int[8];
             arraycopy[0] = array[0];
 
-            string numri =""+array[0];
+            string numri = "" + array[0];
             for (int i = 1; i < 8; i++)
             {
 
@@ -136,6 +136,7 @@ namespace DSProject
             }
             key = Int32.Parse(numri);
             return key;
+        }
 
         bool isInArray(int[] arr, int nr)
         {
@@ -147,7 +148,6 @@ namespace DSProject
             }
             return false;
         }
-    }
 
     private void button2_Click(object sender, EventArgs e)
         {
@@ -165,7 +165,12 @@ namespace DSProject
             string encryptedString = Encrypt(txtPlaintexti.Text, RandomKey());
             byte[] byteArray = Encoding.Unicode.GetBytes(encryptedString);
             txtCiphertexti.Text =Convert.ToBase64String(byteArray);
-        }
+            if (checkBox1.Checked)
+                textBoxqelsi.Text =""+ key;
+
+
+
+      }
 
         private void plainTextBox2_TextChanged(object sender, EventArgs e)
         {
@@ -189,6 +194,23 @@ namespace DSProject
         private void label4_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if(checkBox1.Checked)
+            {
+                textBoxqelsi.Text =""+key;
+            }
+            else
+            textBoxqelsi.Text = "";
+           
+                
+        }
+
+        private void textBoxqelsi_TextChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 
