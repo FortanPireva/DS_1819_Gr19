@@ -1,0 +1,16 @@
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\bin\Debug\Projekti2.exe.config
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\bin\Debug\Projekti2.exe
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\bin\Debug\Projekti2.pdb
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\bin\Debug\MySql.Data.dll
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\bin\Debug\Google.Protobuf.dll
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\bin\Debug\MySql.Data.xml
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\obj\Debug\Projekti2.csprojAssemblyReference.cache
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\obj\Debug\Projekti2.Login.resources
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\obj\Debug\Projekti2.Properties.Resources.resources
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\obj\Debug\Projekti2.csproj.GenerateResource.cache
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\obj\Debug\Projekti2.csproj.CoreCompileInputs.cache
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\obj\Debug\Projekti2.csproj.CopyComplete
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\obj\Debug\Projekti2.exe
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\obj\Debug\Projekti2.pdb
+C:\Users\KobitPC\source\repos\Projekti2\Projekti2\obj\Debug\Projekti2.Registration.resources

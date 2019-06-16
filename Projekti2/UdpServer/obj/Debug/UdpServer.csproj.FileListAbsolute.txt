@@ -1,0 +1,7 @@
+C:\Users\KobitPC\source\repos\Projekti2\UdpServer\bin\Debug\UdpServer.exe.config
+C:\Users\KobitPC\source\repos\Projekti2\UdpServer\bin\Debug\UdpServer.exe
+C:\Users\KobitPC\source\repos\Projekti2\UdpServer\bin\Debug\UdpServer.pdb
+C:\Users\KobitPC\source\repos\Projekti2\UdpServer\obj\Debug\UdpServer.csprojAssemblyReference.cache
+C:\Users\KobitPC\source\repos\Projekti2\UdpServer\obj\Debug\UdpServer.csproj.CoreCompileInputs.cache
+C:\Users\KobitPC\source\repos\Projekti2\UdpServer\obj\Debug\UdpServer.exe
+C:\Users\KobitPC\source\repos\Projekti2\UdpServer\obj\Debug\UdpServer.pdb
