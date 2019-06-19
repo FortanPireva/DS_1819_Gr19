@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,6 +37,18 @@ namespace Projekti2
 
             Array.Copy(receivedData, incomingByte, length);
             return incomingByte;
+        }
+        public static byte[] getPublicKey()
+        {
+            //Merr absolute path per fajllin e certifikates se serverit
+            string Certificate = Path.GetFullPath("UdpServer.cer");
+
+            // Load the certificate into an X509Certificate object.
+            X509Certificate cert = new X509Certificate(Certificate);
+
+
+            byte[] results = cert.GetPublicKey();
+            return results;
         }
     }
 }

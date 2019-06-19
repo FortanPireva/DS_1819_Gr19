@@ -12,17 +12,19 @@ namespace Projekti2
     class DES
     {
        private DESCryptoServiceProvider desObj = new DESCryptoServiceProvider();
-
+        private byte[] key;
       public DES()
         {
             desObj.GenerateKey();
             desObj.GenerateIV();
             desObj.Padding = PaddingMode.Zeros;
             desObj.Mode = CipherMode.CBC;
+            this.key = desObj.Key;
         }
         public byte[]  getKey()
         {
-            return desObj.Key;
+            return key;
+            
         }
         public byte[] getIV()
         {
@@ -33,7 +35,7 @@ namespace Projekti2
         {
 
             
-
+           
             byte[] bytePlaintexti = Encoding.UTF8.GetBytes(plaintext);
 
             MemoryStream ms = new MemoryStream();
