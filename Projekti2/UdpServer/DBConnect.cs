@@ -85,8 +85,9 @@ namespace UdpServer
         }
 
         //Insert statement
-        public void Insert(string name,string mbiemri,string email,string salt,string password,string title,int salary)
+        public Boolean Insert(string name,string mbiemri,string email,string salt,string password,string title,int salary)
         {
+            int nr = 0;
             string query = String.Format("INSERT INTO teacher(name, surname,email,salt,password,title,salary) VALUES('{0}', '{1}','{2}','{3}','{4}','{5}',{6});",name,mbiemri,email,salt,password,title,salary);
             Console.WriteLine(query);
             //open connection
@@ -97,11 +98,19 @@ namespace UdpServer
                 MySqlCommand cmd = new MySqlCommand(query, connection);
 
                 //Execute command
-                int nr=cmd.ExecuteNonQuery();
+                nr=cmd.ExecuteNonQuery();
                 Console.WriteLine(nr);
 
                 //close connection
                 this.CloseConnection();
+            }
+            if(nr>0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -142,9 +151,9 @@ namespace UdpServer
         }
 
         //Select statement
-        public List<string>[] Select()
+        public List<string>[] Select(string email)
         {
-            string query = "SELECT * FROM teacher";
+            string query = "SELECT * FROM teacher where email='"+email+"'";
 
             //Create a list to store the result
             List<string>[] list = new List<string>[8];
@@ -180,6 +189,8 @@ namespace UdpServer
                     list[7].Add(dataReader["salary"] + "");
                   
                 }
+                Console.WriteLine("Salti nga databaza:" + list[4].ToArray()[0]);
+                Console.WriteLine("Passwordi nga databaza :" + list[5].ToArray()[0]);
 
                 //close Data Reader
                 dataReader.Close();

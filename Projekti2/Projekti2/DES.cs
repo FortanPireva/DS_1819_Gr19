@@ -52,7 +52,7 @@ namespace Projekti2
         }
         public  byte[] Dekripto(String ciphertext)
         {
-         
+           
 
             byte[] byteCiphertexti =
                 Convert.FromBase64String(ciphertext);

@@ -14,25 +14,35 @@ namespace UdpServer
     {
         private Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         private EndPoint client;
+        private EndPoint point;
         public UDPServer(string address,int port)
         {
             socket.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.ReuseAddress, true);
            client= new IPEndPoint(IPAddress.Any,0);
             socket.Bind(new IPEndPoint(IPAddress.Parse(address),port));
         }
-        public byte[] SendandReceive(byte[] data)
+        public byte[] Receive()
         {
             socket.SendBufferSize = 128;
             socket.ReceiveBufferSize = 128;
-            EndPoint point = (EndPoint)client;
+             point = (EndPoint)client;
             byte[] receivedData = new byte[1024];
             int length = socket.ReceiveFrom(receivedData, SocketFlags.None, ref point);
             byte[] incomingByte = new byte[length];
             Array.Copy(receivedData, incomingByte, length);
-            socket.SendTo(data,0,data.Length,SocketFlags.None,point);
+            
+            
            
             return incomingByte;
         }
        
+        public void Send(byte[] data)
+        {
+            socket.SendBufferSize = 128;
+            socket.ReceiveBufferSize = 128;
+          
+
+            socket.SendTo(data, 0, data.Length, SocketFlags.None, point);
+        }
     }
 }

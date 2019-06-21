@@ -15,7 +15,7 @@ namespace Projekti2
         {
 
             InitializeComponent();
-              client = new UDPClient("127.0.0.1", 12000);
+            client = new UDPClient("127.0.0.1", 12000);
         }
 
         private void label5_Click(object sender, EventArgs e)
@@ -32,9 +32,52 @@ namespace Projekti2
         {
 
         }
+        private static X509Certificate2 GetCertificateFromStore(string certName)
+        {
 
+            // Get the certificate store for the current user.
+            X509Store store = new X509Store(StoreLocation.CurrentUser);
+            try
+            {
+                store.Open(OpenFlags.ReadOnly);
+
+                // Place all certificates in an X509Certificate2Collection object.
+                X509Certificate2Collection certCollection = store.Certificates;
+                // If using a certificate with a trusted root you do not need to FindByTimeValid, instead:
+                // currentCerts.Find(X509FindType.FindBySubjectDistinguishedName, certName, true);
+                X509Certificate2Collection currentCerts = certCollection.Find(X509FindType.FindByTimeValid, DateTime.Now, false);
+                X509Certificate2Collection signingCert = currentCerts.Find(X509FindType.FindBySubjectDistinguishedName, certName, false);
+                if (signingCert.Count == 0)
+                    return null;
+                // Return the first certificate in the collection, has the right name and is current.
+                return signingCert[0];
+            }
+            finally
+            {
+                store.Close();
+            }
+
+        }
+
+        public static byte[] EncryptDataOaepSha1(X509Certificate2 cert, byte[] data)
+        {
+            // GetRSAPublicKey returns an object with an independent lifetime, so it should be
+            // handled via a using statement.
+            using (RSA rsa = cert.GetRSAPublicKey())
+            {
+                // OAEP allows for multiple hashing algorithms, what was formermly just "OAEP" is
+                // now OAEP-SHA1.
+                return rsa.Encrypt(data, RSAEncryptionPadding.OaepSHA1);
+            }
+        }
         private void btnregjistro_Click(object sender, EventArgs e)
         {
+             X509Certificate2 cert = GetCertificateFromStore("CN=RootCA");
+            if (cert == null)
+            {
+                Console.WriteLine("Certificate 'CN=CERT_SIGN_TEST_CERT' not found.");
+                Console.ReadLine();
+            }
             string name = emritxt.Text.Trim();
             string mbiemri = mbiemritxt.Text.Trim();
             string email = emailtxt.Text.Trim();
@@ -43,49 +86,59 @@ namespace Projekti2
 
 
 
+
+
             if (validate())
             {
-                name = emritxt.Text.Trim();
-              
+               name = emritxt.Text.Trim();
 
-                mbiemri = mbiemritxt.Text.Trim();
-                
-           
+
+              mbiemri = mbiemritxt.Text.Trim();
+
+
                 DES des = new DES();
 
 
-                string mesazhi = emritxt.Text + ":" + mbiemritxt.Text + ":" + emailtxt.Text + ":" + passwordtxt.Text + ":" + titullitxt.Text + ":" +rrogatxt.Text;
+                string mesazhi = name + ":" + mbiemri + ":" + emailtxt.Text + ":" + passwordtxt.Text.Trim() + ":" + titullitxt.Text + ":" + rrogatxt.Text;
+                Console.WriteLine(mesazhi);
                 byte[] encrytedData = des.Enkripto(mesazhi);
-                
+
                 byte[] IV = des.getIV();
-                RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-                RSAPKCS1KeyExchangeFormatter formater =new RSAPKCS1KeyExchangeFormatter(rsa);
+                byte[] key = des.getKey();
 
 
-            //    rsa.ImportCspBlob(UDPClient.getPublicKey());
+                byte[] encryptedKey = EncryptDataOaepSha1(cert, key);
 
-              //  byte[] encryptedKey = RSAClass.RSAEncrypt(des.getKey(), rsa.ExportParameters(true), false);
+                Console.WriteLine(encryptedKey.Length);
+                Console.WriteLine(Convert.ToBase64String(encryptedKey));
+              
+                Console.WriteLine(Convert.ToBase64String(key));
+                Console.WriteLine(Convert.ToBase64String(DecryptDataOaepSha1(cert, encryptedKey)));
 
-                //int newSize = IV.Length + encryptedKey.Length + encrytedData.Length;
 
-                //var ms = new MemoryStream(new byte[newSize], 0, newSize, true, true);
-                //ms.Write(IV, 0, IV.Length);
-                //ms.Write(encryptedKey, 0, encryptedKey.Length);
-                //ms.Write(encrytedData, 0, encrytedData.Length);
-                //byte[] data = ms.GetBuffer();
+                string delimiter = ".";
+              string fullmessageEncrypted = Convert.ToBase64String(IV) + delimiter + Convert.ToBase64String(encryptedKey) + delimiter + Convert.ToBase64String(encrytedData);
+          
+           
+            byte[] receivedData = client.SendAndReceive(Encoding.UTF8.GetBytes(fullmessageEncrypted));
 
-                string delimiter = "$";
-                string fullmessageEncrypted = Encoding.UTF8.GetString(IV) + delimiter+Encoding.UTF8.GetString(des.getKey())+delimiter+Encoding.UTF8.GetString(encrytedData);
-                byte[] receivedData = client.SendAndReceive(Encoding.UTF8.GetBytes(fullmessageEncrypted));
+            Console.WriteLine("qa qova :" + fullmessageEncrypted.Length);
+                Console.WriteLine("IV:" + Convert.ToBase64String(IV));
+                Console.WriteLine("Qelsi: " + Convert.ToBase64String(encryptedKey));
+                Console.WriteLine("Mesazhi: " + Convert.ToBase64String(encrytedData));
+                Console.WriteLine(Encoding.UTF8.GetString(des.Dekripto(Convert.ToBase64String(receivedData))));
 
-                string receivedData1 = Encoding.ASCII.GetString(receivedData);
-
-                mbiemritxt.Text = receivedData1;
-                MessageBox.Show("Registered successfully");
-                Login login = new Login();
-                this.Hide();
-                login.Show();
-
+                if (Encoding.UTF8.GetString(des.Dekripto(Convert.ToBase64String(receivedData))).Substring(0,2) == "OK")
+                {
+                    MessageBox.Show("Registered successfully");
+                    Login login = new Login();
+                    this.Hide();
+                    login.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Regjistrimi deshtoi");
+                }
             }
             else
             {
@@ -116,7 +169,7 @@ namespace Projekti2
             string pattern = "^[a-zA-Z]";
             if (Regex.IsMatch(emritxt.Text, pattern) && emritxt.Text.Length > 2)
             {
-                emritxt.Text = "";
+                
                 return true;
             }
             else
@@ -130,7 +183,7 @@ namespace Projekti2
             string pattern = "^[a-zA-Z]";
             if (Regex.IsMatch(mbiemritxt.Text, pattern) && mbiemritxt.Text.Length > 2)
             {
-                mbiemritxt.Text = "";
+               
                 return true;
             }
             else
@@ -144,7 +197,7 @@ namespace Projekti2
             string pattern = "^[a-zA-Z]";
             if (Regex.IsMatch(titullitxt.Text, pattern))
             {
-                titullitxt.Text = "";
+                
                 return true;
             }
             else
@@ -162,7 +215,7 @@ namespace Projekti2
             }
             else
             {
-                rrogatxt.Text = "";
+               
                 return true;
             }
         }
@@ -172,7 +225,7 @@ namespace Projekti2
             string pattern = "^[\\S*$]"; // no spaces
             if (passwordtxt.Text.Length > 4 && Regex.IsMatch(passwordtxt.Text, pattern) && passwordtxt.Text.Equals(kpasswordtxt.Text))
             {
-                passwordtxt.Text = "";
+                
                 return true;
             }
             else
@@ -186,7 +239,7 @@ namespace Projekti2
             string pattern = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
             if (Regex.IsMatch(emailtxt.Text, pattern, RegexOptions.IgnoreCase))
             {
-                emailtxt.Text = "";
+                
                 return true;
             }
             else
@@ -198,7 +251,7 @@ namespace Projekti2
         private bool validate()
         {
 
-            if (validateName() && validateSurname() && validateEmail() && validateTitle() && validateSalary() 
+            if (validateName() && validateSurname() && validateEmail() && validateTitle() && validateSalary()
                  && validatePass())
             {
                 return true;
@@ -212,6 +265,19 @@ namespace Projekti2
         private void titullitxt_TextChanged(object sender, EventArgs e)
         {
 
+        }
+        private static void EncryptFile(string inFile, RSACryptoServiceProvider rsaPublicKey)
+        {
+            
+        }
+        public static byte[] DecryptDataOaepSha1(X509Certificate2 cert, byte[] data)
+        {
+            // GetRSAPrivateKey returns an object with an independent lifetime, so it should be
+            // handled via a using statement.
+            using (RSA rsa = cert.GetRSAPrivateKey())
+            {
+                return rsa.Decrypt(data, RSAEncryptionPadding.OaepSHA1);
+            }
         }
     }
 }
